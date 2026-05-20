@@ -3,45 +3,215 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Catalogo.Presentation</title>
+    <title>🌟 AKIHABARA GAME ARCADE 🌟</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Catalogo.Presentation.styles.css" asp-append-version="true" />
+
+    <style>
+        /* Fondo con gradiente psicodélico dinámico global */
+        body {
+        background: linear-gradient(45deg, #ff007f, #7000ff, #00ffff, #ffea00) !important;
+        background-size: 400% 400% !important;
+        animation: cambioFondo 10s ease infinite !important;
+        color: #fff !important;
+        font-family: 'MS Gothic', 'Comic Sans MS', sans-serif !important;
+        min-height: 100vh;
+        }
+
+        @Html.Raw("@") keyframes cambioFondo {
+        0% {
+        background-position: 0% 50%;
+        }
+
+        50% {
+        background-position: 100% 50%;
+        }
+
+        100% {
+        background-position: 0% 50%;
+        }
+        }
+
+        /* Barra de navegación estilo arcade retro nocturno */
+        .navbar-otaku {
+        background: rgba(15, 0, 30, 0.9) !important;
+        border-bottom: 4px dashed #ff007f !important;
+        box-shadow: 0 4px 15px rgba(255, 0, 127, 0.5);
+        }
+
+        .navbar-brand-otaku {
+        color: #ffea00 !important;
+        font-weight: 900 !important;
+        text-shadow: 2px 2px #00ffff;
+        font-size: 1.5rem;
+        }
+
+        .nav-link-otaku {
+        color: #00ffcc !important;
+        font-weight: bold !important;
+        text-transform: uppercase;
+        }
+
+        .nav-link-otaku:hover {
+        color: #ff007f !important;
+        text-shadow: 0 0 8px #ff007f;
+        transform: scale(1.1);
+        }
+
+        /* Contenedor principal estilo caja de neón de Tokio */
+        .contenedor-principal-otaku {
+        background: rgba(0, 0, 0, 0.85) !important;
+        border: 5px dashed #00ffcc !important;
+        box-shadow: 0 0 25px #ff00ff, inset 0 0 15px #00ffcc !important;
+        padding: 30px !important;
+        border-radius: 20px !important;
+        margin-top: 20px !important;
+        margin-bottom: 40px !important;
+        animation: parpadeoBorde 2s linear infinite;
+        }
+
+        @Html.Raw("@") keyframes parpadeoBorde {
+        50% {
+        border-color: #ff00ff;
+        box-shadow: 0 0 25px #00ffff, inset 0 0 15px #ff00ff;
+        }
+        }
+
+        /* Títulos H1 globales con animación flotante */
+        h1, .titulo-japon {
+        font-size: 3rem !important;
+        color: #ffea00 !important;
+        text-shadow: 3px 3px 0px #ff007f, -3px -3px 0px #00ffff !important;
+        text-align: center !important;
+        font-weight: 900 !important;
+        animation: flotar 3s ease-in-out infinite !important;
+        margin-bottom: 30px !important;
+        }
+
+        @Html.Raw("@") keyframes flotar {
+        0%, 100% {
+        transform: translateY(0);
+        }
+
+        50% {
+        transform: translateY(-8px);
+        }
+        }
+
+        /* Transformar listas (como tu catálogo) en tarjetas interactivas */
+        li, .review-item, tr {
+        background: linear-gradient(135deg, #111, #222) !important;
+        border-left: 6px solid #ff007f !important;
+        padding: 12px !important;
+        margin-bottom: 15px !important;
+        border-radius: 8px !important;
+        box-shadow: 3px 3px 0px #00ffff !important;
+        color: #fff !important;
+        list-style: none !important;
+        transition: all 0.2s ease-in-out !important;
+        }
+
+        li:hover, .review-item:hover, tr:hover {
+        transform: scale(1.03) rotate(0.5deg) !important;
+        background: linear-gradient(135deg, #222, #333) !important;
+        box-shadow: 0 0 10px #00ffff !important;
+        }
+
+        /* Forzar enlaces normales para que parezcan botones arcade */
+        a[href*="Agregar"], .btn-primary, .btn-secondary, button[type="submit"] {
+        background: #ff007f !important;
+        color: white !important;
+        border: none !important;
+        padding: 10px 20px !important;
+        font-weight: bold !important;
+        text-transform: uppercase !important;
+        border-radius: 5px !important;
+        box-shadow: 0 0 10px #ff007f !important;
+        text-decoration: none !important;
+        display: inline-block;
+        transition: 0.3s !important;
+        }
+
+        a[href*="Agregar"]:hover, .btn-primary:hover, .btn-secondary:hover, button[type="submit"]:hover {
+        background: #00ffff !important;
+        color: #000 !important;
+        box-shadow: 0 0 25px #00ffff !important;
+        transform: translateY(-3px) !important;
+        }
+
+        /* Estilos para textos descriptivos y formularios */
+        input, textarea, select {
+        background: #110022 !important;
+        color: #00ffcc !important;
+        border: 2px solid #ff007f !important;
+        font-weight: bold !important;
+        }
+
+        .parpadeo {
+        animation: parpadear 0.8s infinite;
+        color: #00ff00 !important;
+        }
+
+        @Html.Raw("@") keyframes parpadear {
+        0%, 100% {
+        opacity: 1;
+        }
+
+        50% {
+        opacity: 0;
+        }
+        }
+
+        /* Footer arcade */
+        .footer-otaku {
+        background: rgba(0, 0, 0, 0.9) !important;
+        border-top: 3px solid #00ffcc !important;
+        color: #ffea00 !important;
+        }
+    </style>
 </head>
 <body>
+
+    <marquee style="background: #ffea00; color: #000; font-weight: bold; padding: 6px; font-size: 1.2rem; margin: 0; display: block;">
+        ✦ 🌟 店内放送！ ¡SISTEMA OPERATIVO GAME CORE JAPONÉS ACTIVADO EN TODO EL SITIO! ★ 🕹️ ✦
+    </marquee>
+
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-otaku mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Catalogo.Presentation</a>
+                <a class="navbar-brand navbar-brand-otaku" asp-area="" asp-controller="Home" asp-action="Index">🎮 TOKYO ARCADE</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                        aria-expanded="false" aria-label="Toggle navigation" style="background-color: #00ffcc;">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <li class="nav-item" style="background: none !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important;">
+                            <a class="nav-link nav-link-otaku" asp-area="" asp-controller="Home" asp-action="Index">🏠 Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li class="nav-item" style="background: none !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important;">
+                            <a class="nav-link nav-link-otaku" asp-area="" asp-controller="Home" asp-action="Privacy">🔒 Privacy</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 contenedor-principal-otaku">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Catalogo.Presentation - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer-otaku footer text-muted">
+        <div class="container text-center" style="color: #00ffcc !important;">
+            &copy; 2026 - Catalogo.Presentation - <span class="parpadeo">🕹️ LIVE MODE 🕹️</span> - <a asp-area="" asp-controller="Home" asp-action="Privacy" style="color: #ffea00 !important; background: none !important; box-shadow: none !important; padding: 0 !important;">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

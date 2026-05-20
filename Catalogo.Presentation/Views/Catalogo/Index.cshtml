@@ -1,0 +1,33 @@
+﻿@model List<CatalogoApp.Domain.Models.Item>
+<h1>Mi Catálogo</h1>
+
+<!-- Filtro por género -->
+<div>
+    <a asp-action="Index">Todos</a>
+
+    @if (ViewBag.Generos != null)
+    {
+        foreach (var gen in (List<string>)ViewBag.Generos)
+        {
+            <span> | </span>
+            <a asp-action="Index" asp-route-genero="@gen">@gen</a>
+        }
+    }
+</div>
+
+<hr />
+
+<!-- Lista de items -->
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>
+            <a asp-action="Detalle" asp-route-id="@item.Id">@item.Titulo</a>
+            -- @item.Genero (@item.Ano)
+        </li>
+    }
+</ul>
+
+<hr />
+
+<a asp-action="Agregar">+ Agregar Videojuego</a>

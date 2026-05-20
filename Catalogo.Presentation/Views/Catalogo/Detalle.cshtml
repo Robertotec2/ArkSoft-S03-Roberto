@@ -1,0 +1,95 @@
+﻿@model CatalogoApp.Domain.Models.Item
+
+<div class="contenedor-otaku">
+    <h1 class="titulo-japon flotante">@Model.Titulo</h1>
+
+    <div style="font-size: 1.2rem; line-height: 1.8; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+        <p><strong>⚡ ジャンル (Género):</strong> <span style="color: #00ffcc;">@Model.Genero</span></p>
+        <p><strong>🎮 コンソール (Consola):</strong> <span style="color: #ff007f;">@Model.Consola</span></p>
+        <p><strong>📅 年 (Año):</strong> <span style="color: #ffea00;">@Model.Ano</span></p>
+        <p><strong>📝 説明 (Descripción):</strong> <span style="color: #fff;">@Model.Descripcion</span></p>
+    </div>
+
+    <hr style="border-color: #ff007f; margin: 30px 0;" />
+
+    <div class="reviews-section">
+        <div class="rating-promedio" style="margin-bottom: 25px; font-size: 1.3rem; text-align: center;">
+            <span class="parpadeo">【 LIVE RATING 】</span>
+            <span id="promedio-estrellas" style="color: #ffea00; margin-left: 5px; font-size: 1.6rem; text-shadow: 0 0 5px #ffea00;">☆☆☆☆☆</span>
+            <span id="promedio-texto" style="color: #00ffff; font-size: 1rem; display: block; margin-top: 5px;">(Sin calificaciones)</span>
+        </div>
+
+        <h2 style="font-size: 2rem; color: #00ffcc; text-shadow: 2px 2px #000; margin-bottom: 20px; text-align: center;">💬 REVIEWS 💬</h2>
+        <div id="lista-reviews"></div>
+
+        <hr style="border-color: #00ffff; margin-top: 30px;" />
+
+        <div class="form-otaku">
+            <h3 style="margin-top: 0; font-size: 1.4rem; color: #ffea00; text-align: center;">✨ ¡Deja tu opinión Otaku! ✨</h3>
+
+            <div style="margin-bottom: 12px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #00ffcc;">Tu Nombre / ユーザー名:</label>
+                <input type="text" id="review-autor" placeholder="Ej. Roberto Solis" required />
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #ff007f;">Calificación / 評価:</label>
+                <select id="review-rating">
+                    <option value="5">★★★★★ (5 estrellas - 神)</option>
+                    <option value="4">★★★★☆ (4 estrellas - 良い)</option>
+                    <option value="3">★★★☆☆ (3 estrellas - 普通)</option>
+                    <option value="2">★★☆☆☆ (2 estrellas - 微妙)</option>
+                    <option value="1">★☆☆☆☆ (1 estrella - 悪い)</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #ffea00;">Comentario / コメント:</label>
+                <textarea id="review-comentario" style="height: 80px;" placeholder="¿Qué te pareció el juego?" required></textarea>
+            </div>
+
+            <div style="text-align: center;">
+                <button type="button" onclick="agregarReview()" class="btn-neon">
+                    💾 GUARDAR REVIEW 💾
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <hr style="border-color: #ff007f; margin-top: 30px;" />
+
+    <div style="text-align: center;">
+        <a asp-action="Index" class="btn-neon" style="background: #00ffff !important; color: #000 !important; font-size: 0.9rem;">
+            🔙 返回 (Volver al Catálogo)
+        </a>
+    </div>
+</div>
+
+<script>
+    var juegoKey = "reviews_data_" + "@Model.Titulo".replace(/\s+/g, '_');
+    document.addEventListener("DOMContentLoaded", function() { actualizarPantallaYRating(); });
+    function obtenerReviews() { var datos = localStorage.getItem(juegoKey); return datos ? JSON.parse(datos) : []; }
+    function actualizarPantallaYRating() {
+        var reviews = obtenerReviews(); var listaContainer = document.getElementById('lista-reviews'); listaContainer.innerHTML = "";
+        if (reviews.length === 0) {
+            listaContainer.innerHTML = `<p id="sin-reviews-msg" style="color: #ff007f; font-style: italic; text-align: center; font-size: 1.1rem;">❌ No hay reviews guardadas en este servidor ❌</p>`;
+            document.getElementById('promedio-estrellas').innerText = "☆☆☆☆☆"; document.getElementById('promedio-texto').innerText = "(Sin calificaciones)"; return;
+        }
+        var sumaTotal = 0;
+        reviews.forEach(function(rev) {
+            sumaTotal += parseInt(rev.puntos); var estrellasVisuales = "★".repeat(rev.puntos) + "☆".repeat(5 - rev.puntos);
+            var bloqueHtml = `<div class="review-item-otaku"><div><strong style="color: #00ffcc;">👤 ${rev.nombre}</strong> <span style="color: #ffea00;">${estrellasVisuales}</span></div><p style="margin: 8px 0 0 0; color: #fff;">👉 ${rev.texto}</p></div>`;
+            listaContainer.insertAdjacentHTML('beforeend', bloqueHtml);
+        });
+        var promedio = (sumaTotal / reviews.length).toFixed(1); var estrellasRedondeadas = Math.round(promedio);
+        document.getElementById('promedio-estrellas').innerText = "★".repeat(estrellasRedondeadas) + "☆".repeat(5 - estrellasRedondeadas);
+        document.getElementById('promedio-texto').innerText = `⭐ REAL RATING: ${promedio} / 5 (Basado en ${reviews.length} otakus)`;
+    }
+    function agregarReview() {
+        var autor = document.getElementById('review-autor').value.trim(); var puntosSelect = document.getElementById('review-rating').value; var comentario = document.getElementById('review-comentario').value.trim();
+        if (autor === "" || comentario === "") { alert("❌ ¡Error! Debes rellenar los datos, por favor."); return; }
+        var listaActual = obtenerReviews(); listaActual.push({ nombre: autor, puntos: puntosSelect, texto: comentario });
+        localStorage.setItem(juegoKey, JSON.stringify(listaActual)); actualizarPantallaYRating();
+        document.getElementById('review-autor').value = ""; document.getElementById('review-comentario').value = "";
+    }
+</script>
