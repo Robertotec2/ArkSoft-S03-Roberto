@@ -10,3 +10,6 @@ Funcionalidades principales
     Interfaz de usuario: Diseño estilizado con elementos interactivos, efectos visuales de navegación y estructura de información optimizada.
 
     Fichas técnicas: Visualización de detalles de cada juego mediante una estructura de datos organizada.
+
+
+Uso de IA: Use la ia en arreglar el codigo y dejar bonito el codigo y la pagina
