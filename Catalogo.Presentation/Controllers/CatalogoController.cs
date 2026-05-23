@@ -1,6 +1,7 @@
 ﻿using CatalogoApp.Application.Services;
 using CatalogoApp.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq; // AGREGADO: Necesario para usar .Where()
 
 namespace CatalogoApp.Presentation.Controllers
 {
@@ -8,39 +9,42 @@ namespace CatalogoApp.Presentation.Controllers
     {
         private readonly ItemService _service;
 
-        // El servicio llega por inyección de dependencias
         public CatalogoController(ItemService service)
         {
             _service = service;
         }
 
-        // Lista con filtro opcional por género
-        public IActionResult Index(string? genero)
+        // MODIFICADO: Se agregó searchString para el buscador
+        public IActionResult Index(string? genero, string? searchString)
         {
             var items = string.IsNullOrEmpty(genero)
                 ? _service.ObtenerTodos()
                 : _service.ObtenerPorGenero(genero);
 
+            // AGREGADO: Lógica del buscador
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                items = items.Where(i => i.Titulo.Contains(searchString, System.StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
             ViewBag.Generos = _service.ObtenerGeneros();
             ViewBag.GeneroActual = genero;
+            ViewBag.SearchString = searchString; // AGREGADO: Para mantener el texto en el input
 
             return View(items);
         }
 
-        // Detalle de un item
         public IActionResult Detalle(int id)
         {
             var item = _service.ObtenerPorId(id);
             return item == null ? NotFound() : View(item);
         }
 
-        // Formulario — GET
         public IActionResult Agregar()
         {
             return View();
         }
 
-        // Formulario — POST
         [HttpPost]
         public IActionResult Agregar(Item item)
         {
@@ -48,7 +52,6 @@ namespace CatalogoApp.Presentation.Controllers
             return RedirectToAction("Index");
         }
 
-        // Eliminar
         public IActionResult Eliminar(int id)
         {
             _service.Eliminar(id);

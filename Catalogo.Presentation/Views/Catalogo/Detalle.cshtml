@@ -3,11 +3,23 @@
 <div class="contenedor-otaku">
     <h1 class="titulo-japon flotante">@Model.Titulo</h1>
 
-    <div style="font-size: 1.2rem; line-height: 1.8; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
-        <p><strong>⚡ ジャンル (Género):</strong> <span style="color: #00ffcc;">@Model.Genero</span></p>
-        <p><strong>🎮 コンソール (Consola):</strong> <span style="color: #ff007f;">@Model.Consola</span></p>
-        <p><strong>📅 年 (Año):</strong> <span style="color: #ffea00;">@Model.Ano</span></p>
-        <p><strong>📝 説明 (Descripción):</strong> <span style="color: #fff;">@Model.Descripcion</span></p>
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+
+        <div style="border-right: 2px dashed #ff007f; padding-right: 15px;">
+            <p><strong>⚡ ジャンル (Género):</strong> <span style="color: #00ffcc;">@Model.Genero</span></p>
+            <p><strong>🎮 コンソール (Consola):</strong> <span style="color: #ff007f;">@Model.Consola</span></p>
+            <p><strong>📅 年 (Año):</strong> <span style="color: #ffea00;">@Model.Ano</span></p>
+
+            <div style="margin-top: 15px;">
+                <span style="background: #ff007f; color: white; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; margin-right: 5px; box-shadow: 0 0 5px #ff007f;">@Model.Genero</span>
+                <span style="background: #00ffff; color: black; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; box-shadow: 0 0 5px #00ffff;">@Model.Consola</span>
+            </div>
+        </div>
+
+        <div>
+            <p><strong>📝 説明 (Descripción):</strong> <span style="color: #fff;">@Model.Descripcion</span></p>
+        </div>
+
     </div>
 
     <hr style="border-color: #ff007f; margin: 30px 0;" />
@@ -29,12 +41,12 @@
 
             <div style="margin-bottom: 12px;">
                 <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #00ffcc;">Tu Nombre / ユーザー名:</label>
-                <input type="text" id="review-autor" placeholder="Ej. Roberto Solis" required />
+                <input type="text" id="review-autor" placeholder="Ej. Roberto Solis" required style="width: 100%;" />
             </div>
 
             <div style="margin-bottom: 12px;">
                 <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #ff007f;">Calificación / 評価:</label>
-                <select id="review-rating">
+                <select id="review-rating" style="width: 100%; padding: 8px;">
                     <option value="5">★★★★★ (5 estrellas - 神)</option>
                     <option value="4">★★★★☆ (4 estrellas - 良い)</option>
                     <option value="3">★★★☆☆ (3 estrellas - 普通)</option>
@@ -45,7 +57,7 @@
 
             <div style="margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #ffea00;">Comentario / コメント:</label>
-                <textarea id="review-comentario" style="height: 80px;" placeholder="¿Qué te pareció el juego?" required></textarea>
+                <textarea id="review-comentario" style="height: 80px; width: 100%; padding: 8px;" placeholder="¿Qué te pareció el juego?" required></textarea>
             </div>
 
             <div style="text-align: center;">
@@ -68,28 +80,70 @@
 <script>
     var juegoKey = "reviews_data_" + "@Model.Titulo".replace(/\s+/g, '_');
     document.addEventListener("DOMContentLoaded", function() { actualizarPantallaYRating(); });
-    function obtenerReviews() { var datos = localStorage.getItem(juegoKey); return datos ? JSON.parse(datos) : []; }
+
+    function obtenerReviews() {
+        var datos = localStorage.getItem(juegoKey);
+        return datos ? JSON.parse(datos) : [];
+    }
+
     function actualizarPantallaYRating() {
-        var reviews = obtenerReviews(); var listaContainer = document.getElementById('lista-reviews'); listaContainer.innerHTML = "";
+        var reviews = obtenerReviews();
+        var listaContainer = document.getElementById('lista-reviews');
+        listaContainer.innerHTML = "";
+
         if (reviews.length === 0) {
             listaContainer.innerHTML = `<p id="sin-reviews-msg" style="color: #ff007f; font-style: italic; text-align: center; font-size: 1.1rem;">❌ No hay reviews guardadas en este servidor ❌</p>`;
-            document.getElementById('promedio-estrellas').innerText = "☆☆☆☆☆"; document.getElementById('promedio-texto').innerText = "(Sin calificaciones)"; return;
+            document.getElementById('promedio-estrellas').innerText = "☆☆☆☆☆";
+            document.getElementById('promedio-texto').innerText = "(Sin calificaciones)";
+            return;
         }
+
         var sumaTotal = 0;
-        reviews.forEach(function(rev) {
-            sumaTotal += parseInt(rev.puntos); var estrellasVisuales = "★".repeat(rev.puntos) + "☆".repeat(5 - rev.puntos);
-            var bloqueHtml = `<div class="review-item-otaku"><div><strong style="color: #00ffcc;">👤 ${rev.nombre}</strong> <span style="color: #ffea00;">${estrellasVisuales}</span></div><p style="margin: 8px 0 0 0; color: #fff;">👉 ${rev.texto}</p></div>`;
+
+        // MODIFICADO: Se agregó el índice (index) para poder borrar la reseña exacta
+        reviews.forEach(function(rev, index) {
+            sumaTotal += parseInt(rev.puntos);
+            var estrellasVisuales = "★".repeat(rev.puntos) + "☆".repeat(5 - rev.puntos);
+
+            // AGREGADO: El botón de borrar (🗑️) con posición absoluta dentro del div
+            var bloqueHtml = `
+            <div class="review-item-otaku" style="position: relative; background: #222; padding: 15px; margin-bottom: 10px; border-radius: 8px; border-left: 5px solid ${rev.puntos >= 4 ? '#00ffcc' : '#ff007f'};">
+                <div><strong style="color: #00ffcc;">👤 ${rev.nombre}</strong> <span style="color: #ffea00; margin-left: 10px;">${estrellasVisuales}</span></div>
+                <p style="margin: 8px 0 0 0; color: #fff;">👉 ${rev.texto}</p>
+                <button onclick="borrarReview(${index})" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #ff007f; border: 1px solid #ff007f; border-radius: 5px; cursor: pointer; padding: 2px 5px;" title="Borrar reseña">🗑️</button>
+            </div>`;
             listaContainer.insertAdjacentHTML('beforeend', bloqueHtml);
         });
-        var promedio = (sumaTotal / reviews.length).toFixed(1); var estrellasRedondeadas = Math.round(promedio);
+
+        var promedio = (sumaTotal / reviews.length).toFixed(1);
+        var estrellasRedondeadas = Math.round(promedio);
         document.getElementById('promedio-estrellas').innerText = "★".repeat(estrellasRedondeadas) + "☆".repeat(5 - estrellasRedondeadas);
         document.getElementById('promedio-texto').innerText = `⭐ REAL RATING: ${promedio} / 5 (Basado en ${reviews.length} otakus)`;
     }
+
     function agregarReview() {
-        var autor = document.getElementById('review-autor').value.trim(); var puntosSelect = document.getElementById('review-rating').value; var comentario = document.getElementById('review-comentario').value.trim();
+        var autor = document.getElementById('review-autor').value.trim();
+        var puntosSelect = document.getElementById('review-rating').value;
+        var comentario = document.getElementById('review-comentario').value.trim();
+
         if (autor === "" || comentario === "") { alert("❌ ¡Error! Debes rellenar los datos, por favor."); return; }
-        var listaActual = obtenerReviews(); listaActual.push({ nombre: autor, puntos: puntosSelect, texto: comentario });
-        localStorage.setItem(juegoKey, JSON.stringify(listaActual)); actualizarPantallaYRating();
-        document.getElementById('review-autor').value = ""; document.getElementById('review-comentario').value = "";
+
+        var listaActual = obtenerReviews();
+        listaActual.push({ nombre: autor, puntos: puntosSelect, texto: comentario });
+        localStorage.setItem(juegoKey, JSON.stringify(listaActual));
+        actualizarPantallaYRating();
+
+        document.getElementById('review-autor').value = "";
+        document.getElementById('review-comentario').value = "";
+    }
+
+    // AGREGADO: Función para borrar una reseña del LocalStorage
+    function borrarReview(index) {
+        if(confirm("¿Seguro que deseas eliminar esta review?")) {
+            var listaActual = obtenerReviews();
+            listaActual.splice(index, 1); // Elimina el elemento en el índice específico
+            localStorage.setItem(juegoKey, JSON.stringify(listaActual));
+            actualizarPantallaYRating(); // Refresca la pantalla
+        }
     }
 </script>

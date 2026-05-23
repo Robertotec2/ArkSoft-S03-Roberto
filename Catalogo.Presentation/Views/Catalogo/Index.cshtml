@@ -1,7 +1,14 @@
 ﻿@model List<CatalogoApp.Domain.Models.Item>
+
 <h1>Mi Catálogo</h1>
 
-<!-- Filtro por género -->
+<form asp-action="Index" method="get" style="margin-bottom: 20px; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 2px dashed #00ffff; display: flex; gap: 10px;">
+    <input type="text" name="searchString" value="@ViewBag.SearchString" placeholder="🔍 Buscar videojuego en el arcade..." style="flex: 1; padding: 10px; border-radius: 5px; border: 2px solid #ff007f; background: #110022; color: #00ffcc;" />
+    <input type="hidden" name="genero" value="@ViewBag.GeneroActual" />
+    <button type="submit" style="background: #ff007f; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer;">BUSCAR</button>
+    <a asp-action="Index" style="background: #333; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; border: 1px solid #555;">LIMPIAR</a>
+</form>
+
 <div>
     <a asp-action="Index">Todos</a>
 
@@ -17,7 +24,6 @@
 
 <hr />
 
-<!-- Lista de items -->
 <ul>
     @foreach (var item in Model)
     {

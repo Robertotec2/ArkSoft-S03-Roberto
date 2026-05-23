@@ -14,5 +14,13 @@
     "Consola": "XBOX",
     "Ano": 2000,
     "Descripcion": "El mejor juego XD"
+  },
+  {
+    "Id": 3,
+    "Titulo": "sas",
+    "Genero": "sawd",
+    "Consola": "dwad",
+    "Ano": 2131,
+    "Descripcion": "dwa"
   }
 ]
